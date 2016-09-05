@@ -1,8 +1,8 @@
-This is an api written in python that returns verses out of the king james bible.  It uses bottle as the api engine.
-By default it runs on port 5942 but you can change this in the bibleapi.py file.
+This is an api written in python that returns verses out of the King James bible.  It uses bottle as the engine.
+By default it runs on port 5934 but you can change this in the bibleapi file.
 -------------------------------------------------------------------------------
 USAGE:
-Single Verse: address:port/bookid/chapter/verse
+Single Verse: address:port/bookid/chapter/verse1/[verse2]
 
 2 verses from the same chapter and book: address:port/bookid/chapter/verse1/verse2
 
@@ -39,7 +39,7 @@ List of all of the books and their number:
 25	Lamentations	64	3 John
 26	Ezekiel		65	Jude
 27	Daniel		66	Revelation
-28	Hosea	 
+28	Hosea
 29	Joel
 30	Amos
 31	Obadiah
@@ -53,4 +53,4 @@ List of all of the books and their number:
 39	Malachi
 
 -------------------------------------------------------------------------------
-This project by Jesse Wallace (c0deous) <jessewallaceblog.wordpress.com> <c0deous.net>
+This project by Jesse Wallace (c0deous) <c0deo.us>

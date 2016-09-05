@@ -1,0 +1,71 @@
+#!/usr/bin/env python
+# encoding: utf-8
+
+# BibleAPI
+# Jesse Wallace (c0deous)
+# <c0deo.us>
+#
+#You may run, modify, use commercially, and distribute this program freely.
+#This comes with ABSOLOUTELY NO WARRANTY, to the extent permitted by applicable law.
+
+from bottle import route, run
+from xml.dom.minidom import parse, parseString
+
+# Prefs #
+host_address = '0.0.0.0'
+host_port = 5934
+app_debug = False
+
+# Read verse
+def bibleRef(bookid, chapter, verse):
+	try:
+		if int(bookid) != 0 and int(chapter) != 0 and int(verse) != 0:
+			element = dom.getElementsByTagName('BIBLEBOOK') #get all the books
+			book = element[int(bookid) - 1] #single out requested book
+			chapterelement = book.getElementsByTagName('CHAPTER') #get all of the chapters
+			chpter = chapterelement[int(chapter) - 1] #single out requested chapter
+			verseelement = chpter.getElementsByTagName('VERS') #get all verses
+			vrse = verseelement[int(verse) - 1].firstChild.nodeValue #single out requested verse
+		else:
+			raise IndexError
+	except IndexError: #if the verse, chapter, or book doesn't exist return a 'Not Found' message
+		print('Not Found')
+		return('Not Found')
+	return(vrse) #If it doesn't get any errors then return the text of the verse
+
+# Routes #
+@route('/') #set route
+def homepage():
+	return 'KJV Bible API\n  Usage: /bookid/chapter/verse1/[verse2]' #return a simple message
+
+@route('/<bookid>/<chapter>/<verse>')
+def verselookup(bookid="1", chapter="1", verse="1"):
+	return verse + " " + bibleRef(bookid, chapter, verse) #call the bibleRef function
+
+@route('/<bookid>/<chapter>/<verse1>/<verse2>')#set route
+def multiverselookup(bookid="1", chapter="1", verse1="1", verse2="2"):
+	return verse1 + " " + bibleRef(bookid, chapter, verse1) + " " + verse2 + " " +  bibleRef(bookid, chapter, verse2)
+	# call the bibleRef function twice and join the two verses with their corresponding number
+
+@route('/info')
+def info():
+	for node in dom.getElementsByTagName('INFORMATION'):
+		return node.toxml()
+
+if __name__ == '__main__':
+	print(' ')
+	print('Bible API by Jesse Wallace (c0deous) <c0deo.us>') #attribution
+	print('[*] Loading bible.xml... this may take a moment') #loading message
+	try:
+	    dom = parse('db/bible.xml') #open bible.xml
+	except:
+		print('[-] Error Loading db/bible.xml !')
+		exit()
+	print('[+] Done!') #finished loading
+	print(' ')
+	try:
+		# Startup
+		run(host=host_address, port=host_port, debug=app_debug)
+	except KeyboardInterrupt:
+		print('\nQuitting...')
+		exit()
